@@ -22,8 +22,8 @@ export function getMode(): AppMode {
  * Run `npm run models` with a key set to list what your account can reach.
  */
 export const MODEL_DEFAULTS = {
-  /** Text and tool-calling. Listed as a Groq production model. */
-  text: "llama-3.3-70b-versatile",
+  /** Text and tool-calling. Active model on Groq account. */
+  text: "openai/gpt-oss-120b",
   /** Vision. Named by Groq's vision documentation. */
   vision: "qwen/qwen3.8-27b",
 } as const;
