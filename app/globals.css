@@ -1,0 +1,317 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens.
+ *
+ * Every colour in the app is declared here as a role, then redeclared for dark
+ * mode under two scopes: the media query for the OS setting, and `[data-theme]`
+ * for the in-app toggle. The toggle must win over the OS in both directions,
+ * which is why the media block is guarded with `:not([data-theme="light"])`.
+ */
+:root {
+  color-scheme: light;
+
+  --surface-0: #f6f5f2;
+  --surface-1: #ffffff;
+  --surface-2: #f2f1ed;
+  --surface-3: #e7e6e0;
+
+  --ink-1: #16150f;
+  --ink-2: #57564f;
+  --ink-3: #8a887f;
+
+  --border-1: #e5e3db;
+  --border-2: #d2d0c6;
+
+  --accent: #5b4bd6;
+  --accent-hover: #4a3bc0;
+  --accent-soft: #eeebfc;
+  --accent-ink: #ffffff;
+  --accent-glow: rgb(91 75 214 / 16%);
+
+  --good: #0a7d4a;
+  --good-soft: #e4f6ed;
+  --bad: #c62f2e;
+  --bad-soft: #fceaea;
+  --warn: #8f5d00;
+  --warn-soft: #fdf2df;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --shadow-1: 0 1px 2px rgb(20 20 15 / 5%), 0 2px 8px rgb(20 20 15 / 4%);
+  --shadow-2: 0 2px 4px rgb(20 20 15 / 6%), 0 12px 28px rgb(20 20 15 / 8%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+
+    --surface-0: #0e0e10;
+    --surface-1: #17171a;
+    --surface-2: #1e1e22;
+    --surface-3: #2a2a2f;
+
+    --ink-1: #f4f3ef;
+    --ink-2: #b9b8b1;
+    --ink-3: #85847d;
+
+    --border-1: #2a2a2f;
+    --border-2: #3a3a41;
+
+    --accent: #9c93f5;
+    --accent-hover: #b0a8f8;
+    --accent-soft: #221d3d;
+    --accent-ink: #14111f;
+    --accent-glow: rgb(156 147 245 / 20%);
+
+    --good: #4ac489;
+    --good-soft: #14291f;
+    --bad: #f08080;
+    --bad-soft: #2d1919;
+    --warn: #dda93f;
+    --warn-soft: #2a2114;
+
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 8px rgb(0 0 0 / 24%);
+    --shadow-2: 0 2px 6px rgb(0 0 0 / 36%), 0 14px 32px rgb(0 0 0 / 34%);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-0: #0e0e10;
+  --surface-1: #17171a;
+  --surface-2: #1e1e22;
+  --surface-3: #2a2a2f;
+
+  --ink-1: #f4f3ef;
+  --ink-2: #b9b8b1;
+  --ink-3: #85847d;
+
+  --border-1: #2a2a2f;
+  --border-2: #3a3a41;
+
+  --accent: #9c93f5;
+  --accent-hover: #b0a8f8;
+  --accent-soft: #221d3d;
+  --accent-ink: #14111f;
+  --accent-glow: rgb(156 147 245 / 20%);
+
+  --good: #4ac489;
+  --good-soft: #14291f;
+  --bad: #f08080;
+  --bad-soft: #2d1919;
+  --warn: #dda93f;
+  --warn-soft: #2a2114;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 30%), 0 2px 8px rgb(0 0 0 / 24%);
+  --shadow-2: 0 2px 6px rgb(0 0 0 / 36%), 0 14px 32px rgb(0 0 0 / 34%);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--surface-0);
+  color: var(--ink-1);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+}
+
+/* Respect a reduced-motion preference for every animation in the app. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* --- Scrollbars -------------------------------------------------------- */
+
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-2) transparent;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background: var(--border-2);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-3);
+  background-clip: content-box;
+}
+
+/* --- Reusable surfaces -------------------------------------------------- */
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+
+/* A hairline highlight along the top edge gives cards a lit, raised feel in
+   dark mode without resorting to heavier borders. */
+.card-lit {
+  position: relative;
+}
+.card-lit::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 10%) 30%,
+    rgb(255 255 255 / 10%) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.brand-mark {
+  background: linear-gradient(140deg, var(--accent), color-mix(in oklab, var(--accent) 62%, #ff7ac6));
+  color: var(--accent-ink);
+}
+
+/* --- Markdown -----------------------------------------------------------
+ * Chat answers are markdown, so the prose styles live here rather than being
+ * repeated as utility classes on every element the renderer emits.
+ */
+
+.prose-chat {
+  font-size: 0.9688rem;
+  line-height: 1.7;
+  color: var(--ink-1);
+  overflow-wrap: break-word;
+}
+.prose-chat > * + * {
+  margin-top: 0.8em;
+}
+.prose-chat h1,
+.prose-chat h2,
+.prose-chat h3,
+.prose-chat h4 {
+  font-weight: 640;
+  line-height: 1.32;
+  letter-spacing: -0.011em;
+  margin-top: 1.5em;
+}
+.prose-chat h1 { font-size: 1.32rem; }
+.prose-chat h2 { font-size: 1.14rem; }
+.prose-chat h3 { font-size: 1rem; }
+.prose-chat h4 { font-size: 0.94rem; color: var(--ink-2); }
+.prose-chat strong { font-weight: 640; }
+.prose-chat a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.prose-chat ul,
+.prose-chat ol {
+  padding-left: 1.35em;
+}
+.prose-chat ul { list-style: disc; }
+.prose-chat ol { list-style: decimal; }
+.prose-chat li + li { margin-top: 0.35em; }
+.prose-chat li::marker { color: var(--ink-3); }
+.prose-chat blockquote {
+  border-left: 2px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.7em 1em;
+  color: var(--ink-2);
+}
+.prose-chat blockquote > * + * { margin-top: 0.5em; }
+.prose-chat hr {
+  border: 0;
+  border-top: 1px solid var(--border-1);
+  margin: 1.6em 0;
+}
+.prose-chat code {
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  padding: 0.14em 0.4em;
+  border-radius: 6px;
+}
+.prose-chat pre {
+  background: var(--surface-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius);
+  padding: 1rem 1.05rem;
+  overflow-x: auto;
+}
+.prose-chat pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.845em;
+  line-height: 1.65;
+}
+.prose-chat table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  display: block;
+  overflow-x: auto;
+}
+.prose-chat th,
+.prose-chat td {
+  border: 1px solid var(--border-1);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-chat th {
+  background: var(--surface-2);
+  font-weight: 620;
+}
+
+/* --- Animations -------------------------------------------------------- */
+
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.animate-in {
+  animation: fade-rise 0.28s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes pulse-dot {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.7); }
+  40%           { opacity: 1;   transform: scale(1); }
+}
+.typing-dot {
+  animation: pulse-dot 1.3s ease-in-out infinite;
+}
